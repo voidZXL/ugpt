@@ -5,6 +5,7 @@ from pathlib import Path
 home = Path.home()
 filepath = home / '.ugpt.env.json'
 import json
+from . import __version__
 
 
 class GPTCommand:
@@ -13,8 +14,8 @@ class GPTCommand:
 
     def __init__(self, exe, *argv: str):
         self.exe = exe
-        self.cmd = argv[0]
-        self.argv = argv[1:]
+        self.cmd = argv[0] if argv else ''
+        self.argv = argv[1:] if argv else []
 
         args = []
         kwargs = {}
@@ -34,6 +35,9 @@ class GPTCommand:
         self.args = args
         self.kwargs = kwargs
         self.api_key = None
+
+        if not self.cmd:
+            return
 
         if self.cmd.startswith('_'):
             print(f'ugpt: command {repr(self.cmd)} not found')
@@ -139,6 +143,13 @@ class GPTCommand:
             }
 
     def __call__(self):
+        if not self.cmd:
+            print(f'ugpt: {__version__}, usage:')
+            print('  - ugpt chat')
+            print('  - ugpt draw "<prompt>"')
+            print('  - ugpt set --proxy=<PROXY_URL>')
+            print('  - ugpt set --key=<API_KEY>')
+            return
         return self.func(*self.args, **self.kwargs)
 
 
