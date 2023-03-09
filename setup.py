@@ -43,6 +43,6 @@ setup(
     ],
     packages=find_packages(exclude=["tests.*", "tests"]),
     entry_points={
-        'console_scripts': ['meta=ugpt.bin:main'],
+        'console_scripts': ['ugpt=ugpt.bin:main'],
     },
 )
